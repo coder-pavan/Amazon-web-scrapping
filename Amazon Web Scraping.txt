@@ -1,0 +1,83 @@
+from bs4 import BeautifulSoup
+import requests 
+import time 
+import datetime
+import smtplib
+# connect to website
+url = 'https://www.amazon.in/Samsung-Internal-Solid-State-MZ-V7S500BW/dp/B07MFBLN7K/ref=sr_1_2?keywords=samsung+970+evo+plus&sr=8-2'
+headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"}
+
+page = requests.get(url,headers = headers)
+soup1=BeautifulSoup(page.content,'html.parser')
+soup2=BeautifulSoup(soup1.prettify(),'html.parser')
+title = soup1.find(id='productTitle').get_text()
+price = soup1.find(class_= 'a-price-whole').get_text() 
+
+print(title)
+print(price)
+        Samsung 970 EVO Plus 500GB PCIe NVMe M.2 (2280) Internal Solid State Drive (SSD) (MZ-V7S500)       
+3,650.
+# Clean up the data a little bit
+price = price.strip()
+title = title.strip()
+print(title)
+print(price)
+Samsung 970 EVO Plus 500GB PCIe NVMe M.2 (2280) Internal Solid State Drive (SSD) (MZ-V7S500)
+3,650.
+# Create a Timestamp for your output to track when data was collected
+import datetime 
+today = datetime.date.today()
+print(today)
+2023-05-17
+# Create CSV and write headers and data into the fileimport csv 
+header = ["Title", "Price","Date"]
+data = [title,price,today]
+with open('D:\AmazonWebScrapperDataSet.csv','w',newline= '',encoding = 'UTF8') as f:
+    writer = csv.writer(f)
+    writer.writerow(header)
+    writer.writerow(data)
+import pandas as pd 
+df = pd.read_csv('D:\AmazonWebScrapperDataSet.csv')
+print(df)
+                                               Title   Price        Date
+0  Samsung 970 EVO Plus 500GB PCIe NVMe M.2 (2280...  3,650.  2023-05-17
+#Now we are appending data to the csv
+
+with open('AmazonWebScraperDataset.csv', 'a+', newline='', encoding='UTF8') as f:
+    writer = csv.writer(f)
+    writer.writerow(data)
+#Combine all of the above code into one function
+def check_price():
+    url = 'https://www.amazon.in/Samsung-Internal-Solid-State-MZ-V7S500BW/dp/B07MFBLN7K/ref=sr_1_2?keywords=samsung+970+evo+plus&sr=8-2'
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"}
+
+    page = requests.get(url,headers = headers)
+    soup1=BeautifulSoup(page.content,'html.parser')
+    soup2=BeautifulSoup(soup1.prettify(),'html.parser')
+    title = soup1.find(id='productTitle').get_text()
+    price = soup1.find(class_= 'a-price-whole').get_text()
+    
+    price = price.strip()
+    title = title.strip()
+    
+    import datetime 
+    today = datetime.date.today()
+    
+    import csv 
+    header = ["Title", "Price","Date"]
+    data = [title,price,today]
+    with open('D:\AmazonWebScrapperDataSet.csv','a+',newline= '',encoding = 'UTF8') as f:
+        writer = csv.writer(f)
+        writer.writerow(data)
+        
+
+    
+    
+while(True):
+    check_price()
+    time.sleep(5)
+
+import pandas as pd 
+df = pd.read_csv('D:\AmazonWebScrapperDataSet.csv')
+print(df)
+                                                
